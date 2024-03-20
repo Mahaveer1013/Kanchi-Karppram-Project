@@ -1,0 +1,143 @@
+{% extends "base_admin.html" %} {% block title %} Employee {% endblock %} {%
+block content %}
+
+<link rel="stylesheet" href="static/css/attendance.css" />
+
+<menu class="table-menu" style="display: flex">
+  <div class="btn-container">
+    <a href="/today_attendance" class="tag-btn click active"
+      >Today Attendance</a
+    >
+    <a href="/month_attendance" class="tag-btn click">This Month Attendance</a>
+    <select name="shift" id="shift" class="tag-btn">
+      <option value="">Select Shift Name</option>
+      <option value="">ALL ~ Shift</option>
+      <option value="A">A ~ Shift</option>
+      <option value="B">B ~ Shift</option>
+      <option value="C">C ~ Shift</option>
+    </select>
+  </div>
+</menu>
+
+<!-- <section class="frame month-attendance" style="display: flex">
+  <div class="inner-frame">
+    <div class="frame-header">
+      <div class="frame-details">
+        <p class="frame-name">Attendance</p>
+        <p class="shift name"><span class="tag">A</span> ~ shift</p>
+      </div>
+      <div class="frame-options">
+        <button type="button" class="download">
+          <i class="fas fa-file-excel"></i>
+        </button>
+      </div>
+    </div>
+    <div class="frame-body">
+      {% if employee_data %} {% for emp_id, records in employee_data.items() %}
+      <h2 class="mt-3">Employee ID: {{ emp_id }}</h2>
+      <table class="table table-bordered mt-3">
+        <thead class="thead-dark">
+          <tr>
+            <th>Date</th>
+            <th>Attendance</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          {% for record in records %}
+          <tr>
+            <td>{{ record.date.strftime('%Y-%m-%d') }}</td>
+            <td>{{ record.attendance }}</td>
+
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endfor %} {% else %}
+      <p class="mt-3">No attendance records found for last month.</p>
+      {% endif %}
+    </div>
+  </div>
+</section> -->
+
+<section class="frame month-attendance" style="display: flex">
+  <div class="inner-frame">
+    <div class="frame-header">
+      <div class="frame-details">
+        <p class="frame-name">Month Attendance</p>
+        <!-- <p class="shift name"><span class="tag">A</span> ~ shift</p> -->
+      </div>
+      <!-- <div class="frame-search">
+        <input
+          type="text"
+          name="idsearch"
+          id="idsearch"
+          placeholder="Search By ID"
+        />
+        <input
+          type="text"
+          name="namesearch"
+          id="namesearch"
+          placeholder="Search By Name"
+        />
+      </div> -->
+      <div class="frame-options">
+        <button type="button" class="download">
+          <i class="fas fa-file-excel"></i>
+        </button>
+      </div>
+    </div>
+    <div class="frame-body">
+      {% if employee_data %}
+      <table class="attendance-table">
+        <thead>
+          <tr class="thead">
+            <th>EmpId</th>
+            {% for date in date %}
+            <th>{{ date }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody class="tableBody filter">
+          {% for emp_id, records in employee_data.items() %}
+          <tr>
+            <td>{{ emp_id }}</td>
+            {% for record in records %} {% if record.attendance =='Present' %}
+            <td>
+              <p style="display: none">Present</p>
+              <i class="fas fa-check-circle"></i>
+            </td>
+            {% elif record.attendance =='O.T' %}
+            <td>
+              <p style="display: none">Over Time</p>
+              <i class="fas fa-clock" style="color: blue"></i>
+            </td>
+            {% elif record.attendance =='Week Off' %}
+            <td>
+              <p style="display: none">Week Off</p>
+              W
+            </td>
+            {% else %}
+            <td>
+              <p style="display: none">Absent</p>
+              <i class="fas fa-times-circle"></i>
+            </td>
+            {% endif %} {% endfor %}
+          </tr>
+
+          {% endfor %} {% else %}
+
+          <p class="mt-3">No attendance records found for last month.</p>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+{% endblock %} {% block scripts %}
+<script src="static/js/script.js"></script>
+<script src="/static/js/filter.js"></script>
+<script src="/static/js/action.js"></script>
+
+{% endblock %}

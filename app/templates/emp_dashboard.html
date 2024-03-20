@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KKL - Employee</title>
+    <!-- <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js4"
+      crossorigin="anonymous"
+    ></script> -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+            
+    <!-- <script src="https://cdn.socket.io/4.7.2/socket.io.js"></script> -->
+    <!-- <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js" crossorigin="anonymous"></script>
+     -->
+
+     
+
+    <link rel="stylesheet" href="static/css/employee.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link rel="icon" type="png" href="../static/img/logomain.png" />
+  </head>
+  <body>
+    <div class="employee_page">
+      <nav class="nav_bar">
+        <div class="profile">
+          <div class="profile_image">
+            {% if user.gender=='Male' %}
+            <img src="../static/img/male.jpeg" alt="" />
+            {% else %}
+            <img src="../static/img/female.jpeg" alt="" />
+            {% endif %}
+          </div>
+          <h1 class="username">{{user.name}}</h1>
+        </div>
+        <div class="brand_name">
+          <div class="brand_logo">
+            <img src="../static/img/logomain.png" alt="" />
+          </div>
+          <h1 class="brand_name">Kanchi Karpooram Limited</h1>
+        </div>
+        <a href="/logout" class="logout">Logout</a>
+      </nav>
+
+      <aside class="sidemenu">
+        <button class="toggle_sidemenu">
+          <i class="open_icon fas fa-arrow-right"></i>
+          <i class="close_icon fas fa-arrow-left"></i>
+        </button>
+        <ul class="menu_options">
+          <li class="menu click profile_menu active" index="0">
+            <div class="icon"><i class="fas fa-user"></i></div>
+            <p class="text">Profile</p>
+          </li>
+          <li class="menu click leave" index="1">
+            <div class="icon"><i class="fas fa-file-alt"></i></div>
+            <p class="text">Leave Request</p>
+          </li>
+          <li class="menu click late" index="2">
+            <div class="icon"><i class="fas fa-clock"></i></div>
+            <p class="text">Late Request</p>
+          </li>
+          <li class="menu click edit" index="3">
+            <div class="icon"><i class="fas fa-user-edit"></i></div>
+            <p class="text">edit profile</p>
+          </li>
+          <li class="menu click analysis" index="4">
+            <div class="icon"><i class="fas fa-chart-bar"></i></div>
+            <p class="text">Analysis</p>
+          </li>
+        </ul>
+      </aside>
+
+      <main class="main active">
+        <div class="message_model">
+          <div class="model_close">
+            <i class="fas fa-times-circle"></i>
+          </div>
+          <div class="title">
+            <i class="fas fa-exclamation-circle"></i>
+            <i class="fas fa-check-circle"></i>
+            Error
+          </div>
+          <p class="message">Your request has been submitted to the admin..!</p>
+          <div class="bar">
+            <div class="indicator"></div>
+          </div>
+        </div>
+
+        <header class="header">
+          <div class="user">
+            user :
+            <div class="tag">Employee</div>
+          </div>
+          <div class="current_path">
+            <div class="current_path_name">
+              <span class="" index="0">Profile</span>
+            </div>
+          </div>
+        </header>
+
+        <section
+          class="section profile_section"
+          index="0"
+          style="display: block"
+        >
+          <div class="section_header">
+            <div class="user_profile">
+              <div class="profile_image_display">
+                {% if user.gender=='Male' %}
+                <img src="../static/img/male.jpeg" alt="" />
+                {% else %}
+                <img src="../static/img/female.jpeg" alt="" />
+                {% endif %}
+              </div>
+              <ul class="basic_details">
+                <li class="detail">{{user.name}}</li>
+                <li class="detail">#{{user.emp_id}}</li>
+                <li class="detail">{{user.shift}}</li>
+              </ul>
+            </div>
+            <div class="actions">
+              <div class="click btn_action" index="3">
+                <i class="fas fa-user-edit"></i>
+                <span class="none">Edit Profile</span>
+              </div>
+            </div>
+          </div>
+          <div class="section_body">
+            <ul class="personal_details">
+              <li class="detail_display">
+                <div class="detail_icon"><i class="fas fa-user"></i></div>
+                Name: {{user.name}}
+              </li>
+              <li class="detail_display">
+                <div class="detail_icon"><i class="fas fa-id-card"></i></div>
+                ID: <span class="uid"> #{{user.emp_id}}</span>
+              </li>
+              <li class="detail_display">
+                <div class="detail_icon"><i class="fas fa-venus-mars"></i></div>
+                Gender: {{user.gender}}
+              </li>
+              <li class="detail_display">
+                <div class="detail_icon"><i class="fas fa-phone-alt"></i></div>
+                Contact: {{user.phoneNumber}}
+              </li>
+              <li class="detail_display">
+                <div class="detail_icon"><i class="fas fa-envelope"></i></div>
+                Email: {{user.email}}
+              </li>
+              <li class="detail_display">
+                <div class="detail_icon">
+                  <i class="fas fa-map-marker-alt"></i>
+                </div>
+                Address: {{user.address}}
+              </li>
+            </ul>
+            <ul class="personal_details">
+              <li class="detail_display">
+                <div class="detail_icon">
+                  <i class="fas fa-calendar-check"></i>
+                </div>
+                DOJ: {{date}}
+              </li>
+              <li class="detail_display">
+                <div class="detail_icon"><i class="fas fa-user-tie"></i></div>
+                Branch: {{user.branch}}
+              </li>
+              <li class="detail_display">
+                <div class="detail_icon"><i class="fas fa-briefcase"></i></div>
+                Designation: {{user.role}}
+              </li>
+              <li class="detail_display">
+                <div class="detail_icon"><i class="fas fa-clock"></i></div>
+                Shift: {{user.shift}}
+              </li>
+              <li class="detail_display">
+                <div class="detail_icon"><i class="fas fa-bed"></i></div>
+                No of Leave Avail: {{user.leave_balance}}
+              </li>
+              <li class="detail_display">
+                <div class="detail_icon"><i class="fas fa-clock"></i></div>
+                No of Late Avail: {{user.late_balance}}
+              </li>
+              <li class="detail_display">
+                <div class="detail_icon">
+                  <i class="fas fa-check-circle"></i>
+                </div>
+                Status: {% if user.freezed_account==False %} Active {%
+                else %} Freezed {% endif %}
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section leave_section" index="1" style="display: none">
+          <div class="inner_section">
+            <div class="seperate_section image_container">
+              <img src="../static/img/Forms-bro.png" alt="" />
+            </div>
+            <div class="seperate_section request_form">
+              <form action="" method="post" class="leave_request" id="leave_form">
+                <h1>Leave Form</h1>
+                <div class="input_field">
+                  <label>From </label>
+                  <input
+                    type="date"
+                    name="fromdate"
+                    id="leave_from"
+                    placeholder="dd-mm-yyyy"
+                    required
+                  />
+                </div>
+                <div class="input_field">
+                  <label>To </label>
+                  <input
+                    type="date"
+                    name="todate"
+                    id="leave_to"
+                    placeholder="dd-mm-yyyy"
+                    required
+                  />
+                </div>
+                <div class="input_field">
+                  <label>Reason </label>
+                  <textarea
+                    name=""
+                    id="leave_reason"
+                    cols="30"
+                    rows="5"
+                    placeholder="Enter your reason here"
+                  ></textarea>
+                </div>
+                <div class="input_field">
+                  <button type="submit" class="requestButton leavesubmit">
+                    Request
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section class="section late_section" index="2" style="display: none">
+          <div class="inner_section">
+            <div class="seperate_section image_container">
+              <img src="../static/img/Lateness-rafiki.png" alt="" />
+            </div>
+            <div class="seperate_section request_form">
+              <form
+                action=""
+                method="post"
+                class="leave_request"
+                id="late_form"
+              >
+                <h1>Late Form</h1>
+                <div class="input_field">
+                  <label>From </label>
+                  <input
+                    type="time"
+                    name="fromdate"
+                    id="late_from"
+                    placeholder="From"
+                    required
+                  />
+                </div>
+                <div class="input_field">
+                  <label>To </label>
+                  <input
+                    type="time"
+                    name="todate"
+                    id="late_to"
+                    placeholder="To"
+                    required
+                  />
+                </div>
+                <div class="input_field">
+                  <label>Reason </label>
+                  <textarea
+                    name=""
+                    id="late_reason"
+                    cols="30"
+                    rows="5"
+                    placeholder="Enter your reason here"
+                  ></textarea>
+                </div>
+                <div class="input_field">
+                  <button type="submit" class="requestButton latesubmit">
+                    Request
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section class="section edit_section" index="3" style="display: none">
+          <div class="inner_section">
+            <h1 class="text">Editable Content</h1>
+            <div class="edit_form">
+              <div class="input_field">
+                <label>Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  class="input"
+                  value="{{user.name}}"
+                  readonly
+                />
+                <button class="btn submit">save</button>
+                <button class="btn cancel">cancel</button>
+              </div>
+              <div class="input_field">
+                <label>Gender</label>
+                <input
+                  type="text"
+                  name="gender"
+                  id="gender"
+                  class="input"
+                  value="{{user.gender}}"
+                  readonly
+                />
+                <button class="btn submit">save</button>
+                <button class="btn cancel">cancel</button>
+              </div>
+              <div class="input_field">
+                <label>Email</label>
+                <input
+                  type="text"
+                  name="email"
+                  id="email"
+                  class="input"
+                  value="{{user.email}}"
+                  readonly
+                />
+                <button class="btn submit">save</button>
+                <button class="btn cancel">cancel</button>
+              </div>
+              <div class="input_field">
+                <label>Contact No</label>
+                <input
+                  type="text"
+                  name="contact"
+                  id="contact"
+                  class="input"
+                  value="{{user.phoneNumber}}"
+                  readonly
+                />
+                <button class="btn submit">save</button>
+                <button class="btn cancel">cancel</button>
+              </div>
+              <div class="input_field">
+                <label>DOJ</label>
+                <input
+                  type="date"
+                  name="phoneNumber"
+                  id="contact"
+                  class="input"
+                  value="{{date}}"
+                  readonly
+                />
+                <button class="btn submit">save</button>
+                <button class="btn cancel">cancel</button>
+              </div>
+              <div class="input_field">
+                <label>Password</label>
+                <input
+                type="text"
+                name="password"
+                id="password"
+                class="input"
+                placeholder="Enter new password"
+                readonly
+                />
+                <button class="btn submit">save</button>
+                <button class="btn cancel">cancel</button>
+              </div>
+              <div class="input_field">
+                <label>Address</label>
+                <textarea
+                  name="address"
+                  id="address"
+                  cols="30"
+                  rows="10"
+                  class="input"
+                  readonly
+                >
+{{user.address}}</textarea
+                >
+                <button class="btn submit">save</button>
+                <button class="btn cancel">cancel</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section edit_section" index="4" style="display: none">
+          <div class="inner_section">
+            <h1 class="text">Employee Analysis</h1>
+            <div class="analysis_header">
+              <div class="analysis_card">
+                <div class="card_title">Attendance Analysis</div>
+                <div class="chart">
+                  <canvas id="attendanceChart" class="chart-container"></canvas>
+                </div>
+              </div>
+              <div class="analysis_card">
+                <div class="card_title">Request Analysis</div>
+                <div class="chart">
+                  <canvas id="workChart" class="chart-container"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="table">
+              <h1 class="title">Request Table</h1>
+              <table class="request_table">
+                <thead>
+                  <th>sno</th>
+                  <th>request type</th>
+                  <th>request date</th>
+                  <th>from</th>
+                  <th>to</th>
+                  <th>request reason</th>
+                  <th>request status</th>
+                </thead>
+                <tbody class="request_table_tbody">
+                  <!-- <tr>
+                    <td>1</td>
+                    <td>Leave</td>
+                    <td>11/11/1111</td>
+                    <td>bus missed</td>
+                    <td>accepted</td>
+                  </tr> -->
+                  <script>
+                    function countChild() {
+                      var tbody = document.querySelector(
+                        ".request_table_tbody"
+                      );
+                      let count = tbody.childElementCount - 1;
+                      return count;
+                    }
+                  </script>
+                  {% if late %} {% for late in late %}
+                  <tr>
+                    <td>
+                      <script>
+                        document.write(countChild());
+                      </script>
+                    </td>
+                    <td>Late</td>
+                    <td>{{late.date}}</td>
+                    <td>{{late.from_time}}</td>
+                    <td>{{late.to_time}}</td>
+                    <td>{{late.reason}}</td>
+                    <td>{{late.hr_approval}}</td>
+                  </tr>
+                  {% endfor %} {% endif %} 
+                  {% if leave %} {% for leave in leave
+                  %}
+                  <tr>
+                    <td>
+                      <script>
+                        document.write(countChild());
+                      </script>
+                    </td>
+                    <td>Leave</td>
+                    <td>{{leave.date}}</td>
+                    <td>{{leave.from_time}}</td>
+                    <td>{{leave.to_time}}</td>
+                    <td>{{leave.reason}}</td>
+                    <td>{{leave.hr_approval}}</td>
+                  </tr>
+                  {% endfor %} {% endif %}
+                  <!-- <tr>
+                    <td>2</td>
+                    <td>late</td>
+                    <td>11/11/1111</td>
+                    <td>bus missed</td>
+                    <td>declined</td>
+                  </tr> -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <input type="hidden" name="leave_bal" value="{{user.leave_balance}}" />
+    <input type="hidden" name="late_bal" value="{{user.late_balance}}" />
+    <input type="hidden" name="absent" value="{{attendance_details.absent}}" />
+    <input
+      type="hidden"
+      name="half-day"
+      value="{{attendance_details.half_day}}"
+    />
+    <input
+      type="hidden"
+      name="communicated"
+      value="{{attendance_details.communicated}}"
+    />
+    <input
+      type="hidden"
+      name="wrong-shift"
+      value="{{attendance_details.wrong_shift}}"
+    />
+    <input
+      type="hidden"
+      name="week-off"
+      value="{{attendance_details.week_off}}"
+    />
+    <input type="hidden" name="c-off" value="{{attendance_details.c_off}}" />
+    <input type="hidden" name="wop" value="{{attendance_details.wop}}" />
+    <input
+      type="hidden"
+      name="present"
+      value="{{attendance_details.present}}"
+    />
+    <!-- js -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        let attendanceData = {};
+
+        attendanceData.absent = document.querySelector(
+          'input[name="absent"]'
+        ).value;
+        attendanceData.present = document.querySelector(
+          'input[name="present"]'
+        ).value;
+        attendanceData.half_day = document.querySelector(
+          'input[name="half-day"]'
+        ).value;
+        attendanceData.communicated = document.querySelector(
+          'input[name="communicated"]'
+        ).value;
+        attendanceData.week_off = document.querySelector(
+          'input[name="week-off"]'
+        ).value;
+        attendanceData.c_off = document.querySelector(
+          'input[name="c-off"]'
+        ).value;
+        attendanceData.wrong_shift = document.querySelector(
+          'input[name="wrong-shift"]'
+        ).value;
+        attendanceData.wop = document.querySelector('input[name="wop"]').value;
+
+        console.log(attendanceData);
+
+        let workData = {};
+        workData.leaveRequest = document.querySelector(
+          'input[name="leave_bal"]'
+        ).value;
+        workData.lateRequest = document.querySelector(
+          'input[name="late_bal"]'
+        ).value;
+
+        function createChart(data, canvasId, title) {
+          let ctx = document.getElementById(canvasId).getContext("2d");
+          let labels = Object.keys(data);
+          let values = Object.values(data);
+
+          let chart = new Chart(ctx, {
+            type: "pie",
+            data: {
+              labels: labels.map((label) => `${label} ${data[label]} days`),
+              datasets: [
+                {
+                  label: title,
+                  data: values,
+                  backgroundColor: [
+                    "rgba(255, 99, 132, 0.7)",
+                    "rgba(54, 162, 235, 0.7)",
+                    "rgba(255, 206, 86, 0.7)",
+                    "rgba(75, 192, 192, 0.7)",
+                  ],
+                  borderColor: [
+                    "rgba(255, 99, 132, 1)",
+                    "rgba(54, 162, 235, 1)",
+                    "rgba(255, 206, 86, 1)",
+                    "rgba(75, 192, 192, 1)",
+                  ],
+                  borderWidth: 1,
+                },
+              ],
+            },
+            options: {
+              title: {
+                display: true,
+                text: title,
+              },
+            },
+          });
+        }
+        // Create Attendance Chart
+        createChart(
+          attendanceData,
+          "attendanceChart",
+          "Attendance Composition"
+        );
+
+        // Create Work Chart
+        createChart(workData, "workChart", "Work Composition");
+      });
+
+      var socket = io();
+
+      socket.on('connect', () => {
+    console.log('Connected to backend server.');
+});
+      socket.on('dicconnect', () => {
+    console.log('Disconnected from backend server.');
+});
+
+      socket.on("leave", function (leave_permission) {
+        var tbody = document.querySelector(".request_table_tbody");
+        let count = tbody.childElementCount + 1;
+        tbody.innerHTML += `
+                  <tr>
+                    <td>${count}</td>
+                    <td>Leave</td>
+                    <td>${leave_permission.date}</td>
+                    <td>${leave_permission.from_time}</td>
+                    <td>${leave_permission.to_time}</td>
+                    <td>${leave_permission.reason}</td>
+                    <td>${leave_permission.hr_approval}</td>
+                  </tr>
+        `;
+      });
+      socket.on("late", function (late_permission) {
+        var tbody = document.querySelector(".request_table_tbody");
+        let count = tbody.childElementCount + 1;
+        tbody.innerHTML += `
+                  <tr>
+                    <td>${count}</td>
+                    <td>Late</td>
+                    <td>${late_permission.date}</td>
+                    <td>${late_permission.from_time}</td>
+                    <td>${late_permission.to_time}</td>
+                    <td>${late_permission.reason}</td>
+                    <td>${late_permission.hr_approval}</td>
+                  </tr>
+        `;
+      });
+
+    </script>
+    <script src="../static/js/req_form.js"></script>
+    <script src="static/js/employee.js"></script>
+  </body>
+</html>

@@ -1,0 +1,259 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KKL - Project</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/attendance.css') }}">
+    <script src="https://cdn.socket.io/4.7.2/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+</head>
+<body> -->
+    <!-- <nav class="nav-bar">
+        <div class="toogle-sidebar">
+            <i class="fas fa-bars"></i>
+        </div>
+        <ul class="options">
+            <li class="option notification-menu">
+                <span class="notification-icon">
+                    <i class="fas fa-bell"></i>
+                     Notifications
+                </span>
+                <ul class="notification-list">
+                    <li class="notifications">
+                        <span class="user-name">Employee 1</span>
+                        <div class="message-subject"></div>
+                    </li>
+                    <li class="notifications">
+                        <span class="user-name">Employee 1</span>
+                        <div class="message-subject">Late Notification</div>
+                    </li>
+                    <li class="notifications">
+                        <span class="user-name">Employee 1</span>
+                        <div class="message-subject">Late Notification</div>
+                    </li>
+                    <li class="notifications">
+                        <span class="user-name">Employee 1</span>
+                        <div class="message-subject">Late Notification</div>
+                    </li>
+                    <li class="notifications">
+                        <span class="user-name">Employee 1</span>
+                        <div class="message-subject">Late Notification</div>
+                    </li>
+                </ul>
+            </li>
+            <li class="option logout">
+                <span>
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </span>
+            </li>
+        </ul>
+    </nav>
+    <aside class="sidebar">
+        <ul class="side-menu">
+            <li class="menu-option active">
+                <span class="icon">
+                    <i class="far fa-calendar-check"></i>
+                </span>
+                <p class="menu-name">Attendance</p>
+            </li>
+            <li class="menu-option">
+                <span class="icon">
+                    <i class="far fa-clock"></i> 
+                </span>
+                <p class="menu-name">Late table</p>
+            </li>
+            <li class="menu-option">
+                <span class="icon">
+                    <i class="fas fa-calendar-plus"></i>
+                </span>
+                <p class="menu-name">Leave table</p>
+            </li>
+            <li class="menu-option" style="display: none;">
+                <span class="icon">
+                    <i class="fas fa-clock"></i>
+                </span>
+                <p class="menu-name">Shift List</p>
+            </li>
+        </ul>
+    </aside> -->
+
+    <div><h1 class="helo">Mahaveer da</h1>
+        <div>
+            <p>Employee ID: <span class="emp_id"></span></p>
+            <p>Employee Name: <span class="emp_name"></span></p>
+            <p>From Time: <span class="from_time"></span></p>
+            <p>To Time: <span class="to_time"></span></p>
+            <p>Reason: <span class="reason"></span></p>
+            <p>Request ID: <span class="request_id"></span></p>
+            <p>Employee ID Again: <span class="emp_id"></span></p>
+            <!-- Add more instances of employee ID as needed -->
+        </div>
+    </div>
+    
+<section class="notification-model">
+    <div class="inner-model">
+            <div class="model-nav">
+                <button class="model-close">
+                    <i class="fas fa-times-circle"></i>
+                </button>
+            </div>
+            <div class="model-body">
+                <div class="model-profile">
+                    <div class="profile-left">
+                        <div class="user-image">
+                            <img src="{{ url_for('static', filename='img/male.jpeg') }}" alt="">
+                        </div>
+                        <div class="user-details">
+                            <h1 class="user-name">
+                                <span class="emp-name"></span>
+                            </h1>
+                            <h1 class="user-name">
+                                #<span class="emp-id"></span>
+                            </h1>
+                        </div>
+                    </div>
+                    <div class="profile-right">
+                     <ul class="personal-details">
+                        <li class="detail-head">User Name's Details</li>
+                        <li class="detail"><strong><i class="fas fa-user"></i> Emp Name : </strong><span class="emp-name"></span></la></li>
+                        <li class="detail"><strong><i class="fas fa-id-card"></i> Emp Id :</strong> #<span class="emp-id"></span></li>
+                        <li class="detail"><strong><i class="fas fa-briefcase"></i> Shift :</strong> A</li>
+                        <li class="detail">
+                            <i class="fas fa-calendar-plus"></i>
+                            <strong>Leave Request Available :</strong> <span class="availLeave">{{req_details.leave_balance}}</span>
+                        </li>
+                        <li class="detail">
+                            <i class="fas fa-clock"></i> 
+                            <strong>Late Request Available :</strong> <span class="availLate">{{req_details.late_balance}}</span></li>
+                        <li class="detail">
+                            <i class="fas fa-phone-alt"></i> 
+                            <strong>Contact No :</strong> <span class="availLate">{{req_details.ph_number}}</span></li>
+                        <li class="detail">
+                            <i class="fas fa-location"></i> 
+                            <strong>Address :</strong>
+                            <span class="availLate">
+                                123 Maple Street
+                                Apartment 4B
+                                Springfield, IL 62704
+                                United States
+                            </span>
+                        </li>
+                     </ul>
+                     <div class="model-message">
+                        <div class="message-header">
+                            <p class="message-subject"><i class="fas fa-calendar-plus"></i> {{req_details.permission_type}} Request</p>
+                            <div class="message-details">
+                                <p class="message-time"><i class="fas fa-clock"></i>{{req_details.req_time}}</p>
+                                ~
+                                <p class="message-date"><i class="fas fa-calendar"></i>{{req_details.req_date}}</p>
+                            </div>
+                        </div>
+                        <div class="message-body">
+                            <p class="messsage">
+                                {{req_details.reason}}
+                            </p>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="model-footer">
+                <input type="hidden" name="request_id" value="{{req_details.id}}">
+                <a class="model-btn print-btn">
+                    <i class="fas fa-print"></i> 
+                    <span class="btn-text">Print</span>
+                </a>
+                <a class="model-btn download-btn">
+                    <i class="fas fa-download"></i>
+                    <span class="btn-text">Download</span>
+                </a>
+                {% if req_details.approval == 'Approved' %}
+                    <button class="model-btn latetable approved" style="background-color:green ;" name='approve' onclick="handleApproval('{{permission_type}}','approve',{{req_details.id}})" id='approve' disabled>
+                        <i class="fas fa-check-circle"></i>
+                        <span class="btn-text">Approved</span>
+                    </button>
+                {% else %}
+                    <button class="model-btn latetable approve" name='approve' onclick="handleApproval('{{permission_type}}','approve',{{req_details.id}})" id='approve'>
+                        <i class="fas fa-check-circle"></i>
+                        <span class="btn-text">Approve</span>
+                    </button>
+                {% endif %}
+
+                {% if req_details.approval == 'Declined' %}
+                    <button class="model-btn latetable declined" style="background-color:red ;" name='decline' onclick="handleApproval('{{permission_type}}','decline',{{req_details.id}})" id='decline' disabled>
+                        <i class="fas fa-times-circle"></i>
+                        <span class="btn-text">Declined</span>
+                    </button>
+                {% else %}
+                    <button class="model-btn latetable decline" name='decline' onclick="handleApproval('{{permission_type}}','decline',{{req_details.id}})" id='decline'>
+                        <i class="fas fa-times-circle"></i>
+                        <span class="btn-text">Decline</span>
+                    </button>
+                {% endif %}
+
+            </div>
+    </div>
+</section>
+
+<!-- <script>
+    const socket = io();
+
+    function handleApproval(permissionType, action, userId) {
+        fetch(`/${permissionType.toLowerCase()}_${action.toLowerCase()}`, {
+            method: "POST",
+            body: JSON.stringify({ userId }),
+        }).then(response => response.json())
+            .then(data => {
+                console.log('Response from server:', data);
+                const status = data.hr_approval;
+                const elementId = `${action.toLowerCase()}`;
+                document.getElementById(elementId).disabled = true;
+                document.getElementById(elementId === 'approve' ? 'decline' : 'approve').disabled = false;
+                document.getElementById(elementId).innerHTML = `<i class="fas fa-${status === 'Approved' ? 'check-circle' : 'times-circle'}"></i><span class="btn-text">${status}</span>`;
+                document.getElementById(elementId === 'approve' ? 'decline' : 'approve').innerHTML = `<i class="fas fa-${status === 'Declined' ? 'check-circle' : 'times-circle'}"></i><span class="btn-text">${status === 'Approved' ? 'Decline' : 'Approve'}</span>`;
+                document.getElementById(elementId).style.backgroundColor = status === 'Approved' ? 'green' : 'red';
+                document.getElementById(elementId === 'approve' ? 'decline' : 'approve').style.backgroundColor = '#3f3f3f';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    socket.on('${permission_type}_hr_approval_update', function(data) {
+        console.log(`${permission_type} details socket`);
+        const userId = data.userId;
+        const hrApproval = data.hr_approval;
+        //document.getElementById(hrApproval.toLowerCase()).textContent = hrApproval;
+        if (hrApproval=='Approved'){
+            document.getElementById('approve').textContent = hrApproval;
+        }
+        else if (hrApproval=='Declined'){
+            document.getElementById('decline').textContent = hrApproval;
+        }
+    });
+
+</script>
+
+
+    </> -->
+<!-- <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+

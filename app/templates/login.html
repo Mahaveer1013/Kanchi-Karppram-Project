@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KKL - Login</title>
+    <link rel="stylesheet" href="../static/css/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="login_page">
+        <div class="screen background">
+            <!-- <img src="../asset/background/kkl_background.jpg" > -->
+        </div>
+        <div class="screen from_container">
+            <div class="brand">
+                <div class="brand_logo">
+                    <img src="../static/img/logomain.png" alt="logo">
+                </div>
+                <h1 class="brand_name">Kanchi Karpooram Limitted</h1>
+            </div>
+            <form action="/admin-login" method="post" class="login">
+                <h1 class="title">login</h1>
+                <div class="input_field">
+                    <label>User Name</label>
+                    <div class="input_box">
+                        <div class="icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <input type="text" name="email" id="email">
+                    </div>
+                </div>
+                <div class="input_field">
+                    <label>Password</label>
+                    <div class="input_box">
+                        <div class="icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <input type="password" name="password" id="password">
+                    </div>
+                </div>
+                <div class="input_field">
+                    <button type="submit" class="submit">
+                        <i class="fas fa-sign-in-alt"></i>
+                        login
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

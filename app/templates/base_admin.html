@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %} {% endblock %}</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+            
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js" crossorigin="anonymous"></script> -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="static/css/late.css" />
+    <link rel="stylesheet" href="static/css/attendance.css" />
+    <link rel="stylesheet" href="static/css/style.css" />
+    <link rel="stylesheet" href="static/css/chart.css">
+  </head>
+  <body>
+    
+    <!-- {% block flash %} {% endblock %} -->
+    <!-- {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'error' %}
+    <div id="error-flash-message" class="alert alert-primary d-flex align-items-center alert-content" role="alert">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+        </svg>
+        <div class="alert-message">
+            <p>{{ message }}</p>
+            <button type="button" class="btn-close" onclick="removeFlashMessage('error-flash-message')" aria-label="Close"><i class="fas fa-xmark alert-error-close"></i></button>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-warning alert-dismissible fade show alert-success alert-content" role="alert">
+      <strong>{{ message }}</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"><i class="fas fa-xmark"></i></button>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    {% endwith %} -->
+    <!-- {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'error' %}
+    <div id="error-flash-message" class="alert alert-primary d-flex align-items-center alert-content" role="alert">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+        </svg>
+        <div class="alert-message">
+            <p>{{ message }}</p>
+            <button type="button" class="btn-close" onclick="removeFlashMessage('error-flash-message')" aria-label="Close"><i class="fas fa-xmark alert-error-close"></i></button>
+        </div>
+    </div>
+    {% else %}
+    <div id="success-flash-message" class="alert alert-success alert-content" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+        <div class="alert-message">
+            <p>{{ message }}</p>
+            <button type="button" class="btn-close" aria-label="Close"><i class="fas fa-xmark alert-success-close"></i></button>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    {% endwith %} -->
+      <!-- {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{category}}" role="alert">
+            <div class="alert-content">
+              <div class="alert-icon">
+                {% if category == 'error' %}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                  </svg>
+                {% else %}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                    <path d="M11.513 3.159a.5.5 0 0 1 .834.343l.917 6a.5.5 0 0 1-.157.436l-1.714 1.429a.5.5 0 0 1-.67-.037l-3.01-2.462a.5.5 0 0 1-.158-.437l.463-2.732a.5.5 0 0 1 .306-.378z"/>
+                    <path fill-rule="evenodd" d="M0 8A8 8 0 1 1 8 0a8 8 0 0 1 0 16A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-6.468 4.356.5.5 0 0 0 .942.343A6 6 0 1 1 8 14a5.998 5.998 0 0 1-5.535-3.625.5.5 0 0 0-.924.383A7 7 0 1 0 8 1z"/>
+                  </svg>
+                {% endif %}
+              </div>
+              <div class="alert-message">{{ message }}</div>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                <i class="fas fa-xmark"></i>
+              </button>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %} -->
+    
+
+    <nav class="nav-bar">
+      <div class="toogle-sidebar">
+        <i class="fas fa-bars"></i>
+      </div>
+      <div class="logo">
+        <img src="static/img/logomain.png" alt="logo">
+        Kanchi Karpooram Limited
+      </div>
+      <ul class="options">
+        <li class="option">
+          <div class="notification-btn">
+            <span class>
+              <i class="fas fa-bell"></i>
+            </span>
+            <div class="notify-count">
+              <p class="count">0</p>
+            </div>
+          </div>
+
+          <ul class="notifications">
+
+            {% if notification %} {% for single_notification in notification %}
+            <li class="notification-box">
+              <div class="profile">
+                <img src="static/img/female.jpeg" alt="default user" />
+              </div>
+              <div class="notification-details">
+                <div class="notification-user-name">
+                  {{single_notification.emp_name}}
+                  <button class="view_profile notify_view_btn" onclick="open_req_profile(
+                    '{{single_notification.req_id}}',
+                    '{{single_notification.permission_type.lower()}}')"><i class="fas fa-eye"></i>
+                  </button>
+                </div> 
+                <div class="notification-message">
+                  {{single_notification.permission_type}}-{{single_notification.reason}}
+                </div>
+              </div>
+            </li>
+            {% endfor %} {% else %}
+            <li class="notification-box" data-display="none">
+              <div class="notification-message">No notification Available</div>
+            </li>
+            {% endif %}
+          </ul>
+        </li>
+        <a href="/logout" class="option logout">
+          <span>
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="icon-text"> Logout </span>
+          </span>
+        </a>
+      </ul>
+    </nav>
+    <aside class="sidebar">
+      <ul class="side-menu">
+        <li class="menu-option active action-menu" index="4">
+          <span class="icon">
+            <i class="fas fa-chart-pie"></i>
+          </span>
+          <p class="menu-name">Analysis</p>
+        </li>
+        <li class="menu-option active action-menu" index="0">
+          <!-- <a href="/" class="side_bar_a"> -->
+            <span class="icon">
+              <i class="far fa-calendar-check"></i>
+            </span>
+            <p class="menu-name">Attendance</p>
+          <!-- </a> -->
+        </li>
+        <li class="menu-option action-menu emp-disp-option" index="1">
+          <!-- <a href="/emp_details" class="side_bar_a"> -->
+            <span class="icon">
+              <i class="fas fa-users"></i>
+            </span>
+            <p class="menu-name">Employees</p>
+          <!-- </a> -->
+        </li>
+        
+        <li class="menu-option action-menu" index="2">
+          <!-- <a href="/late_req_table" class="side_bar_a"> -->
+            <span class="icon">
+              <i class="far fa-clock"></i>
+            </span>
+            <p class="menu-name">Late table</p>
+          <!-- </a> -->
+        </li>
+        <li class="menu-option action-menu" index="3">
+          <!-- <a href="/leave_req_table" class="side_bar_a"> -->
+            <span class="icon">
+              <i class="fas fa-calendar-plus"></i>
+            </span>
+            <p class="menu-name">Leave table</p>
+          <!-- </a> -->
+        </li>
+        <li class="menu-option action-menu" index="5">
+          <!-- <a href="/leave_req_table" class="side_bar_a"> -->
+            <span class="icon">
+              <i class="fas fa-folder-open"></i>
+            </span>
+            <p class="menu-name">Backup</p>
+          <!-- </a> -->
+        </li>
+        <li class="menu-option upload-option">
+          <span class="icon">
+            <i class="fas fa-upload"></i>
+          </span>
+          <p class="menu-name">Upload</p>
+        </li>
+
+        <li class="menu-option delete-option">
+          <span class="icon">
+            <i class="fas fa-user-times"></i>
+          </span>
+          <p class="menu-name">Delete Employee</p>
+        </li>
+
+        <li class="menu-option edit-option">
+          <span class="icon">
+            <i class="fas fa-user-edit"></i>
+          </span>
+          <p class="menu-name">Edit Employee</p>
+        </li>
+        <li class="menu-option reload-option">
+          <span class="icon">
+            <i class="fas fa-sync"></i>
+          </span>
+          <p class="menu-name">Reload</p>
+        </li>
+      </ul>
+    </aside>
+    <div class="reload">
+      <div class="circle-box">
+        <div class="circle"></div>
+      </div>
+    </div>
+      
+    <section class="notification-model myPopup" style="display: none;">
+      <div class="inner-model">
+              <div class="model-nav">
+                  <button class="model-close">
+                      <i class="fas fa-times-circle"></i>
+                  </button>
+              </div>
+              <div class="model-body">
+                  <div class="model-profile">
+                      <div class="profile-left">
+                          <div class="user-image">
+                              <img src="{{ url_for('static', filename='img/male.jpeg') }}" alt="">
+                          </div>
+                          <div class="user-details">
+                              <h1 class="user-name">
+                                  <span class="emp_name"></span>
+                              </h1>
+                              <h1 class="user-name">
+                                  #<span class="emp_id"></span>
+                              </h1>
+                          </div>
+                      </div>
+                      <div class="profile-right">
+                       <ul class="personal-details">
+                          <li class="detail-head">User Name's Details</li>
+                          <li class="detail"><strong><i class="fas fa-user"></i> Emp Name : </strong><span class="emp_name"></span></la></li>
+                          <li class="detail"><strong><i class="fas fa-id-card"></i> Emp Id :</strong> #<span class="emp_id"></span></li>
+                          <li class="detail"><strong><i class="fas fa-briefcase"></i> Shift :</strong> <span class="shift"></span></li>
+                          <li class="detail">
+                              <i class="fas fa-calendar-plus"></i>
+                              <strong>Leave Request Available :</strong> <span class="availLeave leave_bal"></span>
+                          </li>
+                          <li class="detail">
+                              <i class="fas fa-clock"></i> 
+                              <strong>Late Request Available :</strong> <span class="availLate late_bal"></span></li>
+                          <li class="detail">
+                              <i class="fas fa-phone-alt"></i> 
+                              <strong>Contact No :</strong> <span class="availLate ph_number"></span></li>
+                          <li class="detail">
+                              <i class="fas fa-location"></i> 
+                              <strong>Address :</strong>
+                              <span class="availLate address">
+                              </span>
+                          </li>
+                       </ul>
+                       <div class="model-message">
+                          <div class="message-header">
+                              <p class="message-subject"><i class="fas fa-calendar-plus"></i> <span class="permission_type"></span> Request</span>
+                              <div class="message-details">
+                                  <p class="message-time"><i class="fas fa-clock"></i><span class="req_time"></span></p>
+                                  ~
+                                  <p class="message-date"><i class="fas fa-calendar"></i><span class="req_date"></span></p>
+                              </div>
+                          </div>
+                          <div class="message-body">
+
+                              <p class="messsage">
+                                  From : <span class="from_time"></span>
+                              </p>
+                              <p class="messsage">
+                                  To : <span class="to_time"></span>
+                              </p>
+                              <p class="messsage">
+                                  <span class="reason"></span>
+                              </p>
+                          </div>
+                          </div>
+                      </div>
+                  </div>
+  
+              </div>
+              
+              <div class="model-footer">
+                <input type="hidden" name="request_id">
+                <a class="model-btn print-btn">
+                    <i class="fas fa-print"></i> 
+                    <span class="btn-text">Print</span>
+                </a>
+                <a class="model-btn download-btn">
+                    <i class="fas fa-download"></i>
+                    <span class="btn-text">Download</span>
+                </a>
+                    <button class="model-btn latetable approve-btn" name='approve' id="approve">
+                        
+                    </button>
+  
+                    <button class="model-btn latetable decline-btn" name='decline' id="decline">
+                        
+                    </button>
+            </div>
+
+</div>
+  </section>
+
+    <main class="main active">
+      <header class="details-bar">
+        <div class="user-details">
+          <h1 class="user-role">User ~ <span class="role tag">Admin</span></h1>
+        </div>
+        <div class="date-time-details">
+          <p class="date"></p>
+          <p class="time"></p>
+        </div>
+      </header>
+
+      {% block content %}
+      
+      {% endblock %}
+    </main>
+    <section class="side-sections upload-model" style="display: none">
+      <div class="inner-upload main-section">
+        <a class="close-btn">
+          <i class="fas fa-times-circle"></i>
+        </a>
+        <form
+          method="POST"
+          class="upload_form"
+          action="/uploadselect"
+          enctype="multipart/form-data"
+        >
+          <div class="input-field">
+            <label class="label">
+              <input
+                type="radio"
+                name="filetype"
+                value="shift"
+                id="filetype2"
+              />
+              Shift excel
+            </label>
+            <label class="label">
+              <input
+                type="radio"
+                name="filetype"
+                value="addEmployee"
+                id="filetype2"
+              />
+              add employee
+            </label>
+            <label class="label">
+              <input
+                type="radio"
+                name="filetype"
+                value="festival"
+                id="filetype2"
+              />
+              Festival Days
+            </label>
+            <label class="label">
+              <input
+                type="radio"
+                name="filetype"
+                value="weekoff"
+                id="filetype2"
+              />
+              Week OFF
+            </label>
+          </div>
+          <div class="drag-drop-area" id="drop-area">
+            <!-- <input type="file" name="file" id="file" hidden /> -->
+            <input
+              type="file"
+              class="form-control-file uploaded-file file-upload"
+              id="file"
+              name="emp"
+              accept=".xlsx,.xls"
+              hidden
+              required
+            />
+            <p>Drag and drop a file here or click to select a file</p>
+          </div>
+          <div id="file-actions" style="display: none">
+            <button type="button" id="cancel-btn">Cancel</button>
+            <button type="submit" id="upload-btn">Upload</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="side-sections delete-model" style="display: none">
+      <div class="inner-delete-model main-section">
+        <a class="close-btn">
+          <i class="fas fa-times-circle"></i>
+        </a>
+        <div class="header">
+          <div class="input-field">
+            <label class="label active" onclick="showSingleEmp()">
+              <input
+                type="radio"
+                name="deleteType"
+                id="deleteType"
+                value="single_employee"
+                checked="true"
+              />
+              Single Employee
+            </label>
+          </div>
+          <div class="input-field">
+            <label class="label" onclick="showMultiEmp()">
+              <input
+                type="radio"
+                name="deleteType"
+                id="deleteType"
+                value="multiple_employees"
+              />
+              Multiple Employees
+            </label>
+          </div>
+        </div>
+        <div class="display-container">
+          <div class="single-form" style="display: flex">
+            <form method="post" action="/del_single_emp">
+              <div class="input-field">
+                <label>Enter Emp Id</label>
+                <input type="text" name="empid" id="empid" />
+              </div>
+              <div class="button-container">
+                <button class="delete-btns submit">
+                  <i class="far fa-trash-alt"></i>delete
+                </button>
+              </div>
+            </form>
+          </div>
+          <div class="table-container" style="display: none">
+            <form method="post" action="/del_multiple_emp" id="deleteForm">
+              <div class="info-header">
+                <p class="counter">
+                  <span class="tag">0</span>
+                  <span>Selected</span>
+                </p>
+                <div class="button-container">
+                  <button type="button" class="delete-btns cancel">
+                    <i class="fas fa-times"></i>cancel
+                  </button>
+                  <button
+                    class="delete-btns submit confirm"
+                    onclick="submitForm()"
+                  >
+                    <i class="far fa-trash-alt"></i>delete
+                  </button>
+                </div>
+              </div>
+              <div class="info-body">
+                <table
+                  class="delete-table"
+                  style="width: -webkit-fill-available"
+                >
+                  <thead>
+                    <th>Select</th>
+                    <th>Emp Id</th>
+                    <th>Emp Name</th>
+                  </thead>
+                  <tbody class="delete-table-body">
+                    {% for emp_login in emp_login %}
+                    <tr>
+                      <td>
+                        <input
+                          type="checkbox"
+                          name="select"
+                          id="select"
+                          value="{{emp_login.emp_id}}"
+                        />
+                      </td>
+                      <td>{{emp_login.emp_id}}</td>
+                      <td>{{emp_login.name}}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="side-sections edit-model" style="display: none">
+      <div class="inner-delete-model main-section">
+        <a class="close-btn">
+          <i class="fas fa-times-circle"></i>
+        </a>
+        <div class="display-container">
+          <form method="post" action="/edit_employee" id="fetch-form">
+            <div class="single-form" style="display: flex">
+              <p class="title">Edit Employee</p>
+              <div class="input-field">
+                <label>Enter Emp Id</label>
+                <input type="text" name="empid" id="empid" />
+              </div>
+              <div class="input-field">
+                <label>Select Option</label>
+                <select name="editType" id="editType">
+                  <!-- <option value="" disabled>Select type</option> -->
+                  <option value="phoneNumber">Mobile Number</option>
+                  <option value="name">Employee Name</option>
+                  <option value="branch">Branch</option>
+                  <option value="email">Email</option>
+                  <option value="address">Address</option>
+                </select>
+              </div>
+              <div class="button-container">
+                <button type="button" id="fetch" class="delete-btns fetch">
+                  <i class="fas fa-download"></i>Fetch
+                </button>
+              </div>
+              <div class="after-fetch">
+                <div class="input-field">
+                  <input
+                    type="text"
+                    name="new_value"
+                    id="editInput"
+                    class="editInput"
+                  />
+                </div>
+                <button class="delete-btns change">
+                  <i class="fas fa-check"></i>Confirm
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="requested-table">
+          <table class="edit-requests">
+            <thead>
+              <th>Sno</th>
+              <th>EmpId</th>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Old</th>
+              <th>New Request</th>
+              <th>Action</th>
+            </thead>
+            <tbody class="edit-requests-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+
+
+    {% block scripts %}
+     
+    {% endblock %}
+
+    <script>
+      var socket = io();
+
+      socket.on('connect', () => {
+          console.log('Connected to backend server.');
+      });
+            socket.on('dicconnect', () => {
+          console.log('Disconnected from backend server.');
+      });
+
+      const bell_button = document.querySelector(".notification-btn");
+      const notifications = document.querySelector(".notifications");
+      const all_notifications = notifications.querySelectorAll("li");
+      function countNotification() {
+        let count = notifications.childElementCount;
+        if (count > 9) {
+        count = "9+";
+        }
+        if(count<=0){
+          notifications.innerHTML=`<li class="notification-box" data-display="none">
+                <div class="notification-message">No notification Available</div>
+              </li>`;
+        }
+        
+        all_notifications.forEach((element) => {
+        if (element.getAttribute("data-display") == "none") {
+          console.log('calling her \n\n\n');
+          parseInt(count--);
+        }
+        });
+        document.querySelector(".count").innerHTML = count;
+      }
+
+      countNotification();
+
+      socket.on("late", function (late_permission) {
+      console.log("Received late_permission:",late_permission);
+      const notifications = document.querySelector(".notifications");
+      const notification_box = document.querySelector(".notification-box");
+
+      if(document.querySelector(".notification-box")){
+            const default_notification=document.querySelector(".notification-box");
+            default_notification.style.display = "none";
+            default_notification.disabled = true;
+          }
+              notifications.innerHTML += `
+              <li class="notification-box">
+                  <div class="profile">
+                      <img src="static/img/female.jpeg" alt="default user">
+                  </div>
+                  <div class="notification-details">
+                      <div class="notification-user-name">
+                          ${late_permission.emp_name} <button class="view_profile notify_view_btn" onclick="open_req_profile(
+                                '${late_permission.id}',
+                                'late')"><i class="fas fa-eye"></i></button>
+                      </div>
+                      <div class="notification-message">
+                          Late - ${late_permission.reason}
+                      </div>
+                  </div>
+              </li>
+                                `;
+              countNotification();
+
+              // const notification=document.querySelector('.notification-box');
+              // const closeButton = notification.querySelector('.notify_view_btn');
+              // closeButton.addEventListener('click', function() {
+              //     removeNotification(closeButton.parentElement.parentElement.parentElement); // Call removeNotification function when the button is clicked
+              // });
+            // window.location.href = "";
+            });
+
+      socket.on("leave", function (leave_permission) {
+          console.log("Received leave_permission:",leave_permission);
+          const notifications = document.querySelector(".notifications");
+
+          if(document.querySelector(".notification-box")){
+            const default_notification=document.querySelector(".notification-box");
+            default_notification.style.display = "none";
+            default_notification.disabled = true;
+          }
+
+              notifications.innerHTML += `
+              <li class="notification-box">
+                  <div class="profile">
+                      <img src="static/img/female.jpeg" alt="default user">
+                  </div>
+                  <div class="notification-details leave-notification">
+                      <div class="notification-user-name">
+                          ${leave_permission.emp_name}-<button class="view_profile notify_view_btn" onclick="open_req_profile(
+                                '${leave_permission.id}',
+                                'leave')"><i class="fas fa-eye"></i></button>
+                      </div>
+                      <div class="notification-message">
+                          Leave - ${leave_permission.reason}
+                      </div>
+                  </div>
+              </li>
+                            `;
+              countNotification();
+                      
+
+              // const notification=document.querySelector('.notification-box');
+              // const closeButton = notification.querySelector('.notify_view_btn');
+              // closeButton.addEventListener('click', function() {
+              //     removeNotification(closeButton.parentElement.parentElement.parentElement); // Call removeNotification function when the button is clicked
+              // });
+            // window.location.href = "";
+            });
+    
+    </script>
+    <script>
+      // const view_profile=document.querySelectorAll('.notify_view_btn');
+      //   view_profile.forEach(profile => {
+      //   profile.addEventListener('click',()=>{
+      //     removeNotification(profile.parentElement.parentElement.parentElement);
+      //   })
+      // });
+
+      // function removeNotification(notificationElement) {
+      //     notificationElement.remove();
+      //     countNotification(); // Assuming countNotification updates notification count
+      // }
+      document.addEventListener('click', function(event) {
+        console.log('clicked 648 base');
+        console.log(event.target.parentElement);
+          // Check if the clicked element is a .notify_view_btn
+          if (event.target && event.target.parentElement.classList.contains('notify_view_btn')) {
+              // If it is, remove its parent notification element
+              console.log('its notify class base_admin 647');
+              event.target.parentElement.parentElement.parentElement.parentElement.remove();
+            }
+            countNotification();
+      });
+    </script>
+      <script src="static/js/chart.js"></script>
+    <script>
+      let current_shifts=`{{current_shifts | safe}}`;
+      console.log((current_shifts));
+    </script>
+    <script src="static/js/script.js"></script>
+    <script src="/static/js/filter.js"></script>
+    <script src="/static/js/action.js"></script>
+
+  </body>
+</html>

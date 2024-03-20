@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        #chartdiv {
+          width: 100%;
+          height: 500px;
+        }
+        </style>
+
+        <div class="div" index="0" id="chartdiv"></div>
+        <div class="div" index="1" id="presentdiv"></div>
+        <div class="div" index="2" id="absentdiv"></div>
+        <button index="0" id="all">all</button>
+        <button index="1" id="present">present</button>
+        <button index="2" id="absent">absent</button>
+        <!-- Resources -->
+        <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+        <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+        <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+        
+        <!-- Chart code -->
+        <script>
+              function creatPresentChart(data) {
+              am5.ready(function() {
+                // Create root element
+                var root = am5.Root.new("presentdiv");
+        
+                // Set themes
+                root.setThemes([am5themes_Animated.new(root)]);
+        
+                // Create chart
+                var chart = root.container.children.push(
+                  am5percent.PieChart.new(root, {
+                    endAngle: 270
+                  })
+                );
+        
+                // Create series
+                var series = chart.series.push(
+                  am5percent.PieSeries.new(root, {
+                    valueField: "value",
+                    categoryField: "category",
+                    endAngle: 270
+                  })
+                );
+        
+                series.states.create("hidden", {
+                  endAngle: -90
+                });
+        
+                // Set data
+                let chartData = [];
+                Object.keys(data).forEach(key => {
+                  chartData.push({
+                    category: data[key].category,
+                    value: data[key].present || data[key].absent
+                  });
+                });
+        
+                series.data.setAll(chartData);
+        
+                series.appear(1000, 100);
+              });
+            }
+        
+            function creatAbsentChart(data) {
+              am5.ready(function() {
+                // Create root element
+                var root = am5.Root.new("absentdiv");
+        
+                // Set themes
+                root.setThemes([am5themes_Animated.new(root)]);
+        
+                // Create chart
+                var chart = root.container.children.push(
+                  am5percent.PieChart.new(root, {
+                    endAngle: 270
+                  })
+                );
+        
+                // Create series
+                var series = chart.series.push(
+                  am5percent.PieSeries.new(root, {
+                    valueField: "value",
+                    categoryField: "category",
+                    endAngle: 270
+                  })
+                );
+        
+                series.states.create("hidden", {
+                  endAngle: -90
+                });
+        
+                // Set data
+                let chartData = [];
+                Object.keys(data).forEach(key => {
+                  chartData.push({
+                    category: data[key].category,
+                    value: data[key].present || data[key].absent
+                  });
+                });
+        
+                series.data.setAll(chartData);
+        
+                series.appear(1000, 100);
+              });
+            }
+        
+            function creatChart(data) {
+              am5.ready(function() {
+                // Create root element
+                var root = am5.Root.new("chartdiv");
+        
+                // Set themes
+                root.setThemes([am5themes_Animated.new(root)]);
+        
+                // Create chart
+                var chart = root.container.children.push(
+                  am5percent.PieChart.new(root, {
+                    endAngle: 270
+                  })
+                );
+        
+                // Create series
+                var series = chart.series.push(
+                  am5percent.PieSeries.new(root, {
+                    valueField: "value",
+                    categoryField: "category",
+                    endAngle: 270
+                  })
+                );
+        
+                series.states.create("hidden", {
+                  endAngle: -90
+                });
+        
+                // Set data
+                let chartData = [];
+                Object.keys(data).forEach(key => {
+                  chartData.push({
+                    category: data[key].category,
+                    value: data[key].present || data[key].absent
+                  });
+                });
+        
+                series.data.setAll(chartData);
+        
+                series.appear(1000, 100);
+              });
+            }
+        
+            let presentData = {
+              0: {
+                category: "KKL",
+                present: 15,
+              },
+              1: {
+                category: "DR",
+                present: 50,
+              },
+              2: {
+                category: "FT",
+                present: 15,
+              },
+            };
+        
+            let absentData = {
+              0: {
+                category: "KKL",
+                absent: 5,
+              },
+              1: {
+                category: "DR",
+                absent: 10,
+              },
+              2: {
+                category: "FT",
+                absent: 15,
+              },
+            };
+        
+            let allData = {
+              0: {
+                category: "Present",
+                absent: 50,
+              },
+              1: {
+                category: "Absent",
+                absent: 90,
+              },
+            };
+        
+            let all_div = document.querySelectorAll(".div");
+
+
+            document.getElementById("all").addEventListener("click", () => {
+              let index = document.getElementById("all").getAttribute("index");
+              all_div.forEach(div => {
+                if (index == div.getAttribute("index")) {
+                    div.style.display = "block"
+                }else{
+                    div.style.display = "none"
+                }
+              });
+            });
+        
+            document.getElementById("present").addEventListener("click", () => {
+                creatPresentChart(presentData)
+                let index = document.getElementById("present").getAttribute("index");
+
+                all_div.forEach(div => {
+                if (index == div.getAttribute("index")) {
+                    div.style.display = "block"
+                }else{
+                    div.style.display = "none"
+                }
+              });
+            });
+        
+            document.getElementById("absent").addEventListener("click", () => {
+                creatAbsentChart(absentData)
+                let index = document.getElementById("absent").getAttribute("index");
+                
+                all_div.forEach(div => {
+                if (index == div.getAttribute("index")) {
+                    div.style.display = "block"
+                }else{
+                    div.style.display = "none"
+                }
+              });
+            });
+            creatChart(allData);
+        </script>
+        
+        <!-- HTML -->
+
+</body>
+</html>

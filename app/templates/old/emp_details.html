@@ -1,0 +1,157 @@
+{% extends "base_admin.html" %} {% block title %} Employee Details {% endblock
+%} {% block content %}
+
+<link rel="stylesheet" href="static/css/style.css" />
+<link rel="stylesheet" href="static/css/attendance.css" />
+
+<section class="employee-container page-action" style="display: none" index="4">
+  <section class="frame today-attendance">
+    <div class="inner-frame">
+      <div class="frame-header">
+        <div class="frame-details">
+          <p class="frame-name">
+            <i class="fas fa-users"></i> Employee Details
+          </p>
+        </div>
+        <div class="frame-options">
+          <button type="button" class="list btn-display active" index="0">
+            <i class="fas fa-list-ul"></i>
+          </button>
+          <button type="button" class="grid btn-display" index="1">
+            <i class="fas fa-grip"></i>
+          </button>
+          <button type="button" class="download">
+            <i class="fas fa-file-excel"></i>
+          </button>
+        </div>
+      </div>
+      <div class="frame-body">
+        <div class="list-container empdisplay" index="0" style="display: flex">
+          <table class="employee-table" style="margin-top: 10px">
+            <thead>
+              <tr class="tablehead">
+                <th>EmpId</th>
+                <th>Name</th>
+                <th>D-O-J</th>
+                <th>Current Shift</th>
+                <th>Leave Available</th>
+                <th>Late Available</th>
+                <th>Contact No</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody class="tableBody">
+              {% for emp in emp_login %}  
+                <tr>
+                  <td>{{emp.emp_id}}</td>
+                  <td>{{emp.name}}</td>
+                  <td>{{emp.date}}</td>
+                  <td>{{emp.shift}}</td>
+                  <td>{{emp.leave_balance}}</td>
+                  <td>{{emp.late_balance}}</td>
+                  <td>{{emp.phoneNumber}}</td>
+                  <td>{{emp.email}}</td>
+                  <td>
+                    789 Maple Lane Apt 10B, Building C Suburbia City, District
+                    67890 Territory State Countryland 54321
+                  </td>
+                    {% if emp.freezed_account==1 %}
+                    <td class="status">Freezed</td>
+                    {% else %}
+                    <td class="status">Active</td>
+                    {% endif %}
+                </tr>
+              {% endfor %}
+
+            </tbody>
+          </table>
+        </div>
+        <div
+          class="grid-container empdisplay"
+          style="margin-top: 10px"
+          index="1"
+          style="display: none"
+        >
+        {% for emp in emp_login %}
+          <div class="card user">
+              {% if emp.freezed_account== 1 %}
+              <div class="status-tag freeze">Freezed</div>
+              {% else %}
+              <div class="status-tag active">Active</div>
+              {% endif %}
+            <div class="card-head">
+              <div class="default-profile">
+                {% if emp.gender == 'Female' %}
+                  <img src="../static/img/Female.jpeg" alt="" />
+                {% else %}
+                  <img src="../static/img/male.jpeg" alt="" />
+                {% endif %}
+              </div>
+              <div class="content">
+                <p class="content-display emp-name">
+                  <i class="fas-icon fas fa-user"></i> {{emp.name}}
+                </p>
+                <p class="content-display emp-id">
+                  <i class="fas-icon fas fa-hashtag"></i> {{emp.emp_id}}
+                </p>
+                <p class="content-display emp-gender">
+                  <i class="fas-icon fas fa-venus-mars"></i> {{emp.gender}}
+                </p>
+              </div>
+            </div>
+            <div class="card-body">
+              <ul class="basic-details">
+                <li class="li username">
+                  <i class="fas-icon fas fa-user"></i> {{emp.name}}
+                </li>
+                <li class="li empid">
+                  <i class="fas-icon fas fa-hashtag"></i> {{emp.emp_id}}
+                </li>
+                <li class="li doj">
+                  <i class="fas-icon fas fa-calendar-alt"></i> {{emp.date}}
+                </li>
+                <li class="li contact">
+                  <i class="fas-icon fas fa-phone"></i> {{emp.phoneNumber}}
+                </li>
+              </ul>
+              <ul class="basic-details">
+                <li class="li email">
+                  <i class="fas-icon fas fa-envelope"></i>
+                  {{emp.email}}
+                </li>
+                <li class="li address">
+                  <i class="fas-icon fas fa-map-marker-alt"></i> 789 Maple Lane
+                  Apt 10B, Building C Suburbia City, District 67890 Territory
+                  State Countryland 54321
+                </li>
+              </ul>
+            </div>
+          </div>
+        {% endfor %}
+
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+    const employe_rows = document.querySelectorAll(".employee-table tbody tr");
+    employe_rows.forEach((row) => {
+      let status = row.querySelector(".status");
+      if (status.innerHTML.trim().toLowerCase() == "freezed") {
+        row.classList.add("freezed");
+        status.innerHTML = `<div class="inner-tag">Freezed</div>`;
+      } else {
+        row.classList.remove("freezed");
+        status.innerHTML = `<div class="tag">Active</div>`;
+      }
+    });
+  </script>
+</section>
+
+{% endblock %} {% block scripts %}
+<script src="static/js/action.js"></script>
+<script src="static/js/script.js"></script>
+
+{% endblock %}
